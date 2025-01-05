@@ -1,0 +1,17 @@
+{
+  "name":"tuckdesign/rs-invoice-qrcode-reader",
+  "description": "Reads QR codes from serbian fiscal invoice in pdf or image formats and gets json data",
+  "license": "MIT",
+  "support": {
+    "email": "contact@tuckdesign.com"
+  },
+  "require": {
+    "php":">=7.4",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "src"
+    ]
+  }
+}
