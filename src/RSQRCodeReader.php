@@ -7,6 +7,7 @@ class RSQRCodeReader
 
     private $url = false;
     public $pdfFontCoef = 0.6;
+    private $data = false;
 
     /**
      * Reads QR code data from pdf defined by path
@@ -76,6 +77,7 @@ class RSQRCodeReader
      */
     public function readFromURL($url) {
         $this->url = $url;
+        $this->data = false;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json', 'Accept: application/json'));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -85,6 +87,7 @@ class RSQRCodeReader
         curl_close($ch);
         if ($result) {
             $ret = json_decode($result, true, JSON_UNESCAPED_UNICODE);
+            $this->data = $ret;
             if ($ret) {
                 return $ret;
             }
@@ -102,8 +105,14 @@ class RSQRCodeReader
      *
      * @return \Mpdf\Mpdf invoice pdf | false
      */
-    public function pdfURL($url, $withDetails = true) {
-        $data = $this->readFromURL($url);
+    public function pdfURL($url = false, $withDetails = true) {
+        if (!$url) {
+            $url = $this->url;
+        }
+        if (!$url) {
+            return false;
+        }
+        $data = $this->data?$this->data:$this->readFromURL($url);
         if (!$data) {
             return false;
         }
